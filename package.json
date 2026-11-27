@@ -26,7 +26,7 @@
     "test": "node --test src/sharedRuntime.test.ts src/vite.test.ts"
   },
   "publishConfig": {
-    "access": "restricted"
+    "access": "public"
   },
   "devDependencies": {
     "@types/react": "^19.0.0",
