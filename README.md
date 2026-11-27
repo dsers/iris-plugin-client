@@ -73,40 +73,63 @@ npm install @baojiliu/iris-plugin-client
 
 ## 调用示例
 
+把一行放进宿主左栏，标题随置顶切换：
+
 ```tsx
+// 只导入类型。这段在编译后会被擦掉，不会打进插件产物。
 import type { Context } from "@baojiliu/iris-plugin-client"
 
+// 本插件文案的命名空间，register 和 bind 要用同一个名字。
 const NS = "showcase"
 
+// 告诉宿主：这个插件会放界面、读置顶、注册文案。
+// 名字只能是 slots、sidebar、locale。宿主确认这些能力就绪后才调用 apply。
 export const inject = ["slots", "sidebar", "locale"] as const
 
+// 插件启动。成功时宿主只调用一次。
 export function apply(ctx: Context) {
+  // 立刻交上文案。返回的函数会在插件卸下时被宿主调用，用来撤掉这份文案。
+  // 用户只是离开主区时不会卸下。
   ctx.effect(() => ctx.locale.register(NS, {
     zh: { panel: "Showcase", pinned: "已置顶" },
     en: { panel: "Showcase", pinned: "Pinned" },
   }))
+
+  // 得到只查上面这份文案的 t。显示中文还是英文由宿主决定。
   const t = ctx.locale.bind(NS)
 
+  // 把一行放进左栏。左栏这个位置还没准备好时会等到它出现再登记。
   ctx.slots.inject("sidebar.panellist", () =>
     ctx.slots.register(
       {
+        // 固定写成左栏这个槽的名字。
         name: "sidebar.panellist",
+        // 这一行的 id。同一 id 再次登记会换掉上一行。
         id: "showcase",
+        // label 里 t 使用的文案命名空间。
         locale: NS,
+        // 左栏每次绘制都会调用。置顶后换标题，就在这里读当前是否置顶。
         label: () => t(ctx.sidebar.pinned("showcase") ? "pinned" : "panel"),
       },
+      // 图标。这里不画图标，所以返回 null。需要图标时按宿主给的 size 来画。
       () => null,
     ),
   )
 }
 ```
 
+构建时改用宿主的 React，并把 `peerDependencies` 里的版本范围写进入口：
+
 ```ts
+// 插件构建用的函数。它不出现在浏览器产物里。
 import { irisPlugin } from "@baojiliu/iris-plugin-client/vite"
 import react from "@vitejs/plugin-react"
 import { defineConfig } from "vite"
 
 export default defineConfig({
+  // react() 负责编译 JSX。
+  // irisPlugin() 把 react、react-dom、react/jsx-runtime 换成宿主正在跑的那一份，
+  // 并按 package.json 的 peerDependencies 生成入口上的 peers。
   plugins: [react(), irisPlugin()],
 })
 ```
