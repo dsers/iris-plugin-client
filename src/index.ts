@@ -1,6 +1,7 @@
 /**
- * Contract shared by the Iris host and frontend plugins.
- * Plugins depend on this package; they do not declare Context themselves.
+ * Iris 前端插件与宿主共用的契约。
+ * 插件从包入口导入这些类型，不要在插件仓库里再声明一份 `Context`。
+ * 宿主实现这些接口，并在 `inject` 列出的服务就绪、且 `peers` 通过之后调用 `apply`。
  */
 
 export type { Dispose } from "./dispose.ts"
