@@ -1,5 +1,5 @@
 {
-  "name": "@dsers/iris-plugin-client",
+  "name": "@baojiliu/iris-plugin-client",
   "version": "0.1.0",
   "description": "Iris 前端插件与宿主共用的契约，以及插件构建时使用的 Vite 插件。",
   "type": "module",
