@@ -1,6 +1,11 @@
 import type { Dispose } from "./dispose.ts"
-import type { LocaleMessages } from "./localeMessages.ts"
-import type { Translate } from "./translate.ts"
+
+export type Translate = (key: string) => string
+
+export interface LocaleMessages {
+  zh: Record<string, string>
+  en: Record<string, string>
+}
 
 export interface Locale {
   register(namespace: string, messages: LocaleMessages): Dispose

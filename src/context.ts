@@ -1,7 +1,6 @@
 import type { Dispose } from "./dispose.ts"
 import type { Locale } from "./locale.ts"
-import type { Sidebar } from "./sidebar.ts"
-import type { SidebarPinEvent } from "./sidebarPinEvent.ts"
+import type { Sidebar, SidebarPinEvent } from "./sidebar.ts"
 import type { Slots } from "./slots.ts"
 
 export interface Context {

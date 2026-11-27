@@ -1,8 +1,18 @@
 import type { Dispose } from "./dispose.ts"
-import type { MainPanelProps } from "./mainPanelProps.ts"
-import type { MainSlotMeta } from "./mainSlotMeta.ts"
-import type { SidebarIconProps } from "./sidebarIconProps.ts"
-import type { SidebarSlotMeta } from "./sidebarSlotMeta.ts"
+import type { Translate } from "./locale.ts"
+import type { SidebarIconProps, SidebarSlotMeta } from "./sidebar.ts"
+
+export interface MainPanelProps {
+  pinned: boolean
+  t: Translate
+}
+
+export interface MainSlotMeta {
+  name: "main"
+  key: string
+  locale: string
+  inject: () => Record<string, never>
+}
 
 /**
  * React slots. `inject` waits until the host has declared the slot, then runs `register`.
